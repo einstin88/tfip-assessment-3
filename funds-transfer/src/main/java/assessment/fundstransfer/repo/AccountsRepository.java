@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 import static assessment.fundstransfer.data.Queries.*;
 import assessment.fundstransfer.model.Account;
 
+/*
+ * Functions to query MySQL DB. Function names are self-explanatory
+ */
 @Repository
 public class AccountsRepository {
     @Autowired

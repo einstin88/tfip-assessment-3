@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+/*
+ * Entity to represent and validate the transfer request form
+ */
 public record TransferRequest(
         @NotBlank(message = "From account cannot be blank")
         @Size(min = 10, max = 10, message = "Invalid account to transfer from")

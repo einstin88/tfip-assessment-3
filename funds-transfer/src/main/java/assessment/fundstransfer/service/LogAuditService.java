@@ -17,6 +17,9 @@ public class LogAuditService {
     @Qualifier(Consts.DB_REDIS)
     RedisTemplate<String, String> template;
 
+    /*
+     * Simple service to log successful transactions to redis
+     */
     public void insertLog(Transaction transaction) {
         log.info(">>> Logging transaction to Redis...");
         template.opsForValue()
