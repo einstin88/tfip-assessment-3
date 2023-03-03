@@ -33,7 +33,7 @@ public class AppConfig {
 
     @Bean(name = Consts.DB_REDIS)
     @Scope("singleton")
-    RedisTemplate<String, Object> createRedisTemplate() {
+    RedisTemplate<String, String> createRedisTemplate() {
         final RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setDatabase(redisDatabase);
         config.setHostName(redisHost);
@@ -53,7 +53,7 @@ public class AppConfig {
         final JedisConnectionFactory jedisFac = new JedisConnectionFactory(config, jedisClient);
         jedisFac.afterPropertiesSet();
 
-        final RedisTemplate<String, Object> template = new RedisTemplate<>();
+        final RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisFac);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new StringRedisSerializer());

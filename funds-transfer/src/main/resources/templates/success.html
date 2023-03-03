@@ -7,6 +7,12 @@
     <title>View 1</title>
 </head>
 <body>
-    
+    <div data-th-object="${transaction}">
+        <p>Your transfer of $<span data-th-text="*{amount}"></span> from </p>
+        <p data-th-text="*{from_account.firstName} + ' ('+ *{from_account.accountId} +') to'"></p>
+        <p data-th-text="*{to_account.firstName} + ' ('+ *{to_account.accountId} +')'"></p>
+        <p>is successful.</p><br>
+        <p data-th-text="'Transaction id is ' + *{transactionId}"></p>
+    </div>
 </body>
 </html>
