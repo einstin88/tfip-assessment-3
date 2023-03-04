@@ -1,5 +1,5 @@
 # Tips on developing your Spring Boot application
-
+## Contents:
 1. [Scaffolding](#1-scaffolding)
     - [What to create?](#b-what-to-create)
 
@@ -7,14 +7,16 @@
 
 3. [Implement your functions](#3-implementations)
 
----
+
 
 ## 0. Purpose / Background
+
 We create Spring Boot applications with the Web & DevTools dependencies to act as a **Web Server with MVC design pattern**. The scope of the server is to listen to HTTP requests, process the requests (often involve validations) and return appropriate responses to the client.
+
 ---
 
 ## 1. Scaffolding
-### **Goal**
+### Goal
 > To generate the general file structure of your application where you'll create the typical classes to fill up with functions later
 
 ### A. Initialize project
@@ -29,6 +31,7 @@ Add the dependencies you need based on the task requirements. Be specific with w
     - config (if you need to access redis or mongoDB)
     - data (to store DB-query helper files)
     - utils (optional)
+![folder_structure](/img/folder-structure.png)
 
 2. Classes (start from bottom to top)
     - AppConfig.java 
