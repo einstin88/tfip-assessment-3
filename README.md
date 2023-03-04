@@ -1,67 +1,81 @@
-# Tips on developing your Spring Boot application
+# Tips on developing your Spring Boot application faster and more fluently
+
 ## Contents:
+
 1. [Scaffolding](#1-scaffolding)
-    - [Goal](#goal)
-    - [What to create?](#b-what-to-create)
 
-2. [Test run your application](#2-test-run)
-    - [Goal](#goal-1)
+   - [Goal](#goal)
+   - [What to create?](#b-what-to-create)
 
-3. [Implement your functions](#3-implementations)
-    - [Controllers](#a-controllers)
+2. [Test run](#2-test-run)
 
+   - [Goal](#goal-1)
 
+3. [Implementations](#3-implementations)
+
+   - [Controllers](#a-controllers)
+   - [Repos](#b-repo)
+   - [Models](#c-model)
+   - [Service](#d-service)
+   - [Utils](#e-utils)
+
+4. [.next()](#4-next)
 
 ## 0. Purpose / Background
 
 We create Spring Boot applications with the Web & DevTools dependencies to act as a **Web Server with MVC design pattern**. The scope of the server is to listen to HTTP requests, process the requests (often involve validations) and return appropriate responses to the client.
 
-Java is an OOP language. Therefore, in Spring, each class (i.e. your bean) *should be* scoped to perform similar tasks. For example, @controller for routing, @service for business logic, @repository for querying data from DB, Model classes for storing form/DB data, etc.. 
+Java is an OOP language. Therefore, in Spring, each class (i.e. your bean) _should be_ scoped to perform similar tasks. For example, @controller for routing, @service for business logic, @repository for querying data from DB, Model classes for storing form/DB data, etc..
 
 It's the same reason as categorizing products in the supermarket lanes. With this approach, it will make your application much easier to debug during development because it'll be more instinctive to find the codes/functions that is generating the error.
 
 ---
 
 ## 1. Scaffolding
+
 ### Goal
+
 > To generate the general file structure of your application where you'll create the typical classes to fill up with functions later
 
 ### A) Initialize project
-Add the dependencies you need based on the task requirements. Be specific with what to add and never add everything that you *think is related,* otherwise there will be conflict(s) in spring-boot's auto-configuration that stops you from starting the application. 
+
+Add the dependencies you need based on the task requirements. Be specific with what to add and never add everything that you _think is related,_ otherwise there will be conflict(s) in spring-boot's auto-configuration that stops you from starting the application.
 
 ### B) What to create
+
 1. **Folders**
-    - controller
-    - service
-    - repo
-    - model
-    - config (if you need to access redis or mongoDB)
-    - data (to store DB-query helper files)
-    - utils (optional)
+   - controller
+   - service
+   - repo
+   - model
+   - config (if you need to access redis or mongoDB)
+   - data (to store DB-query helper files)
+   - utils (optional)
 
 ![folder_structure](/img/folder-structure.png)
 
-
 2. **Classes** (start from bottom to top)
-    - AppConfig.java 
-        > only when using Redis or MongoDB
-    - yourAppRepo.java
-        > Autowire the template - RedisTemplate/ JdbcTemplate/ MongoTemplate
-    - yourAppService.java
-        > Autowire the repo + inject a logger [^1]
-    - yourAppController.java or yourAppRestController.java
-        > Autowire the service + inject a logger [^1]
-     
+   - AppConfig.java
+     > only when using Redis or MongoDB
+   - yourAppRepo.java
+     > Autowire the template - RedisTemplate/ JdbcTemplate/ MongoTemplate
+   - yourAppService.java
+     > Autowire the repo + inject a logger [^1]
+   - yourAppController.java or yourAppRestController.java
+     > Autowire the service + inject a logger [^1]
 3. **application.properties**
-    - add all the properties to connect to the database
-    - enable logging by setting it to *debug*
-        > logging.level.web=debug
+   - add all the properties to connect to the database
+   - enable logging by setting it to _debug_
+     > logging.level.web=debug
 
-[^1]: Inject logger by using *static* LoggerFactory or *[@Slf4j](https://projectlombok.org/features/log)* if you have lombok dependency
+## [^1]: Inject logger by using _static_ LoggerFactory or _[@Slf4j](https://projectlombok.org/features/log)_ if you have lombok dependency
+
 ---
 
 ## [2. Test Run](#contents)
+
 ### Goal
+
 > To check if the application can boot up without errors before you add any of your fancy functions into it.
 
 It's easy to forget one or few properties, or using an old connection string, so it's a good idea to check if you have set them correctly at the start. You may also want to check if the connection to the DB hosted on the cloud is working.
@@ -73,24 +87,27 @@ So, don't wait until you have implemented everything to start your server. DevTo
 ---
 
 ## [3. Implementations](#contents)
-### A. Controllers
+
+### A) Controllers
+
 > Controllers are like routers, it's purpose is to handle incoming requests (i.e map requests to a function), pass the request to a service for further processing, and generate an appropriate response depending on the outcome of the 'service call'
 
 **Controller types:** @controller is used to label a Java class that returns text/html while @RestController is to label a class that returns Json-formatted string. Additionally, annnotate the class with with @RequestMapping and specify its return type (eg. produces=MediaType.HTML_VALUE for @controller class) so that there is no ambiguity to Spring Boot.
 
 > In short, put functions that return html to @controller and json to @restcontroller
 
-**Initial steps:** After your Spring Boot server is running, first create all the routes to your server, ie. create functions and annotate them with @getmapping/ @postmapping plus the path (eg. path="/api/transfer"). As you create these functions, you will also add the *@PathVariable* and/or *@RequestParam*. Initially, use `return null;` so that there is no error. Add in `logger.info("your message")` and you can immediately start checking if your route + requestParam/pathVariable is working.
+**Initial steps:** After your Spring Boot server is running, first create all the routes to your server, ie. create functions and annotate them with @getmapping/ @postmapping plus the path (eg. path="/api/transfer"). As you create these functions, you will also add the _@PathVariable_ and/or _@RequestParam_. Initially, use `return null;` so that there is no error. Add in `logger.info("your message")` and you can immediately start checking if your route + requestParam/pathVariable is working.
 
 > Create all the routes so that you won't miss out on any of the requirements and can immediately start testing as you develop your server
 
-**Next steps:** Once you have the routes, it's time to start thinking of the content to respond to the requests, ie. return what? 
+**Next steps:** Once you have the routes, it's time to start thinking of the content to respond to the requests, ie. return what?
 
-For @controller, it's usually a html page so start creating a html and often you will have to pass some data to dynamically generate the page. Then, it is time to start implenting stuff in [repo](#b-repo) and [model](#c-model). 
+For @controller, it's usually a html page so start creating a html and often you will have to pass some data to dynamically generate the page. Then, it is time to start implenting stuff in [repo](#b-repo) and [model](#c-model).
 
 For @restcontroller, it's usually returning some data from DB or external API calls. So, you will also be starting to do something in repo and model.
 
-### B. Repo
+### B) Repo
+
 > Repository class' purpose is to perform CRUD on the database. Functions in the class should return mapped results[^3] directly. Leave the error handlings (eg. try-catch or null checks) and further data transformation/processing to the [service class](#d-service).
 
 [^3]: Mapped results are data from the DB that has been mapped as a Java object or a collection of Java objects.
@@ -105,27 +122,42 @@ For @restcontroller, it's usually returning some data from DB or external API ca
 
 **Additional for MySQL**: query functions for MySQL require the writing of SQL strings. It's more organized to write these query strings in a seperate file as constants (with `static final`)- normally called `Queries.java`- especially in enterprise applications as it's easier to manage. SQL has it's own syntax and format to follow so it's good to refer to the documentation when you are still at the learning phase. (Thanks Daryl for showing us such documents exist) [Link to the SELECT statement](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 
+### C) Model
 
-### C. Model
-> Classes in *model* are POJOs that has private attributes, getters, setters, toString and others. They are the objects that carry data throughout the server. Their purpose is 1) to map data from forms, or 2) to map data format to a database's table/collection, or 3) to map data for a response by the controller (typically @restcontroller). 
+> Classes in _model_ are POJOs that has private attributes, getters, setters, toString and others. They are the objects that carry data throughout the server. Their purpose is 1) to map data from forms, or 2) to map data format to a database's table/collection, or 3) to map data for a response by the controller (typically @restcontroller).
 
-*Note:* You may write static functions here to say, convert Json string to a class instance or vice versa. But according to Chuk, it's not very organized because it 'pollutes' the POJO and may create inefficiencies in large enterprise applications. The 'better' way is to write functions that transform data from one or more classes to another class in the `Utils.java` file.
+_Note:_ You may write static functions here to say, convert Json string to a class instance or vice versa. But according to Chuk, it's not very organized because it 'pollutes' the POJO and may create inefficiencies in large enterprise applications. The 'better' way is to write functions that transform data from one or more classes to another class in the `Utils.java` file.
 
-**Steps:** They can be created with the help of `Source action...` on your IDE, using Lombok annotations (thanks Daryl again) or with Java Records (a bit more advanced to use). If it is a class to represent a form, you will most likely add the constraint annotations from Jakarta library here. [Link to the documentation of the constraint annotations.](https://javadoc.io/doc/jakarta.validation/jakarta.validation-api/latest/jakarta/validation/constraints/package-summary.html) 
+**Steps:** They can be created with the help of `Source action...` on your IDE, using Lombok annotations (thanks Daryl again) or with Java Records (a bit more advanced to use). If it is a class to represent a form, you will most likely add the constraint annotations from Jakarta library here. [Link to the documentation of the constraint annotations.](https://javadoc.io/doc/jakarta.validation/jakarta.validation-api/latest/jakarta/validation/constraints/package-summary.html)
 
-### D. Service
+### D) Service
+
 > The service class contains functions that perform business logics, ie. it will be called by the controller to process data or fetch data from DB or to transform data to another format, etc. Basically it is like a worker for the controller, so write your codes that do complicated logics here. API calls are made from the @service when needed. As such, it is the intermediary between controller and data.
 
 **Initial steps:** Now that you have a repository function that might or might not return some data, you will write codes that do the check here. Depending on the template used in repo, the service may be checking for exceptions or if the return value is null.
 
-**Custom validation of forms:** Sometimes there is a need to further validate data from a form, for example, tally the data from the form with data from somewhere else in the server. You have to write codes to do this and service is a good place to write them since service has access to the [repo](#b-repo). **Remember** to pass the BindingResult to your function, so that you can add any failed validation as an error. When the controller checks the BindingResult after calling your validation function, it can detect the errors and send the appropriate response back to the user.
+**Custom validation of forms:** Sometimes there is a need to further validate data from a form, for example, tally the data from the form with data from somewhere else in the server. You have to write codes to do this and service is a good place to write them since service has access to the [repo](#b-repo). **Remember** to pass the BindingResult to your function, so that you can add any failed validation as an error. When the controller checks the BindingResult after calling your validation function, it can detect the errors and send the appropriate response back to the requestor.
 
+**Next steps:** Upon doing what you need to in the service, your function is now ready to be called from the controller and you can start doing tests to make sure it works. I'm not knowledgable enough to do unit tests yet, my go-to is using the logger to display what's going on in my service.
 
-### E. Utils
+### E) Utils
+
+> The Utils folder/class is created to store helper functions that should be static. It is like the role of a clerk who does many miscelleneous tasks but is nonetheless important in keeping our code base neat and tidy.
+
+**When to use:** typically when you got some logics that make your function looks bloated, you can put the part where it doesn't need to touch the repo or other Spring beans over here in utils. When there are codes that are repeating a few times and don't touch other beans, put them here. Static functions in your POJO? put them here too.
+
+---
+
+## [4. .next()](#contents)
+
 > TODO
 
+## == END ==
+
+---
 
 ## tfip-assessment-3
+
 ```
 To run in development mode:
 mvn spring-boot:run -Dspring-boot.run.profile="dev"
