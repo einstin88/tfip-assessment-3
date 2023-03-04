@@ -29,6 +29,10 @@ public class AccountsRepository {
                 id);
     }
 
+    public Double findAccountBalance(String id) {
+        return template.queryForObject(SQL_SEL_ACCOUNT_BALANCE, Double.class, id);
+    }
+
     public int[] updateAccountBalance(List<Object[]> updateDetails) {
 
         return template.batchUpdate(SQL_UPD_ACCOUNT_BALANCE, updateDetails);

@@ -5,9 +5,14 @@ import java.util.List;
 
 import assessment.fundstransfer.model.Account;
 import assessment.fundstransfer.model.Transaction;
+import assessment.fundstransfer.model.TransferRequest;
 import jakarta.json.Json;
 
 public class Utils {
+        public static final TransferRequest createNewTransferForm() {
+                return new TransferRequest(null, null, null, null);
+        }
+
         /*
          * Generate the parameters to update account balances
          */

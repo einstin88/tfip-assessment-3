@@ -13,6 +13,7 @@ import assessment.fundstransfer.model.Transaction;
 import assessment.fundstransfer.model.TransferRequest;
 import assessment.fundstransfer.service.FundsTransferService;
 import assessment.fundstransfer.service.LogAuditService;
+import assessment.fundstransfer.utils.Utils;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,13 +36,12 @@ public class FundsTransferController {
             Model model) {
         log.info(">>> Request for landing page...");
 
-        model.addAttribute("transferRequest", new TransferRequest(null, null, null, null));
+        model.addAttribute("transferRequest", Utils.createNewTransferForm());
         model.addAttribute("accounts", svc.getAccountList());
 
         return "funds-transfer";
     }
 
-    
     /*
      * Process the submitted funds-transfer form
      * - first validates the form-bounded details (conditions c1,3,4)
@@ -52,7 +52,7 @@ public class FundsTransferController {
      */
     @PostMapping(path = "/transfer", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String postTransfer(
-        // First validates the form-bounded details (conditions c1,3,4)
+            // First validates the form-bounded details (conditions c1,3,4)
             @Valid TransferRequest transferRequest,
             BindingResult result,
             Model model) {
@@ -83,7 +83,7 @@ public class FundsTransferController {
         // Finally, log the transaction to redis
         logSvc.insertLog(response);
         model.addAttribute("transaction", response);
-        
+
         return "success";
     }
 }

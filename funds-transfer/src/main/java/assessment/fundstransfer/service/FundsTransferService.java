@@ -77,12 +77,16 @@ public class FundsTransferService {
         String transactionID = UUID.randomUUID().toString().substring(0, 8);
         log.info(">>> Generated new Transaction ID: " + transactionID);
 
+        Account from = repoSql.findAccountById(form.from());
+        Account to = repoSql.findAccountById(form.to());
+        Double amount = form.amount();
+
         // Updates account balances of sender and receiver
         int[] results = repoSql.updateAccountBalance(
                 Utils.createUpdateDetails(
-                        repoSql.findAccountById(form.from()),
-                        repoSql.findAccountById(form.to()),
-                        form.amount()));
+                        from,
+                        to,
+                        amount));
 
         // Verify if updates are successful
         for (int result : results) {
@@ -100,11 +104,10 @@ public class FundsTransferService {
         // Generate transaction document
         return Utils.createTransactionResult(
                 transactionID,
-                repoSql.findAccountById(form.from()),
-                repoSql.findAccountById(form.to()),
-                form.amount());
+                from,
+                to,
+                amount);
     }
-
 
     /*
      * Helper functions for validating c0,2,5
