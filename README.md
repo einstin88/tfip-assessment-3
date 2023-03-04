@@ -1,4 +1,4 @@
-# Tips on developing your Spring Boot application faster and more fluently
+# Tips on developing your Spring Boot application faster
 
 ## Contents:
 
@@ -63,12 +63,16 @@ Add the dependencies you need based on the task requirements. Be specific with w
      > Autowire the repo + inject a logger [^1]
    - yourAppController.java or yourAppRestController.java
      > Autowire the service + inject a logger [^1]
+
+![file_structure](/img/folder-with-new-files.png)
+
+
 3. **application.properties**
    - add all the properties to connect to the database
-   - enable logging by setting it to _debug_
+   - enable logging by setting it to *debug*
      > logging.level.web=debug
 
-## [^1]: Inject logger by using _static_ LoggerFactory or _[@Slf4j](https://projectlombok.org/features/log)_ if you have lombok dependency
+[^1]: Inject logger by using _static_ LoggerFactory or _[@Slf4j](https://projectlombok.org/features/log)_ if you have lombok dependency
 
 ---
 
@@ -116,11 +120,11 @@ For @restcontroller, it's usually returning some data from DB or external API ca
 
 **Next steps:** When you have created the POJO, it's time to start using it as the return type in your query functions. Note that at time you want a list of data instead of a single object, so you'll have to think of which function in the template to use. The easy option is to look at Chuk's slides for examples. The better option in my opinion is to refer to the template library's documentation. I'll link them here for convenience.
 
-    - [RedisTemplate](https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/RedisTemplate.html)
-    - [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html)
-    - [MongoTemplate](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html)
+- [RedisTemplate](https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/RedisTemplate.html)
+- [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html)
+- [MongoTemplate](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html)
 
-**Additional for MySQL**: query functions for MySQL require the writing of SQL strings. It's more organized to write these query strings in a seperate file as constants (with `static final`)- normally called `Queries.java`- especially in enterprise applications as it's easier to manage. SQL has it's own syntax and format to follow so it's good to refer to the documentation when you are still at the learning phase. (Thanks Daryl for showing us such documents exist) [Link to the SELECT statement](https://dev.mysql.com/doc/refman/8.0/en/select.html)
+**Additional for MySQL**: query functions for MySQL require the writing of SQL strings. It's more organized to write these query strings in a seperate file as constants (with `static final`)- normally called `Queries.java`- especially in enterprise applications as it's easier to manage. SQL has it's own syntax and format to follow so it's good to refer to the documentation when you are still at the learning phase. (Thanks Daryl for showing us such documents exist). [Link to the SELECT statement](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 
 ### C) Model
 
