@@ -1,4 +1,4 @@
-# Tips on developing your Spring Boot application faster
+# Tips on developing your Spring Boot application more quickly
 
 ## Contents:
 
@@ -21,13 +21,17 @@
 
 4. [.next()](#4-next)
 
+## Credits:
+1. 
+2. 
+
 ## 0. Purpose / Background
 
-We create Spring Boot applications with the Web & DevTools dependencies to act as a **Web Server with MVC design pattern**. The scope of the server is to listen to HTTP requests, process the requests (often involve validations) and return appropriate responses to the client.
+We create Spring Boot applications with the Web & DevTools dependencies to act as a **Web Server with MVC design pattern**. The scope of the server is to listen to HTTP requests, process the requests (often involving validations) and return appropriate responses to the client.
 
-Java is an OOP language. Therefore, in Spring, each class (i.e. your bean) _should be_ scoped to perform similar tasks. For example, @controller for routing, @service for business logic, @repository for querying data from DB, Model classes for storing form/DB data, etc..
+Java is an OOP language. Therefore, in Spring, each class (i.e. your bean) _should contain only_ functions of similar nature. This will be explained in more details in the sub-sections of [Part 3](#3-implementations). For example, @controller for routing, @service for business logic, @repository for querying data from DB, Model classes for holding form/DB data, etc..
 
-It's the same reason as categorizing products in the supermarket lanes. With this approach, it will make your application much easier to debug during development because it'll be more instinctive to find the codes/functions that is generating the error.
+The same approach is taken when categorizing products in the supermarket lanes. Such organization will make your application much easier to debug during development because it'll be more instinctive to find the codes/functions that are generating the error.
 
 ---
 
@@ -84,7 +88,7 @@ Add the dependencies you need based on the task requirements. Be specific with w
 
 It's easy to forget one or few properties, or using an old connection string, so it's a good idea to check if you have set them correctly at the start. You may also want to check if the connection to the DB hosted on the cloud is working.
 
-So, don't wait until you have implemented everything to start your server. DevTools allows you to make changes to your code and helps you restart the server automatically anyway.[^2]
+So, don't wait until you have implemented everything to start your server. DevTools automatically helps you to restart the server every time you make changes to your code.[^2]
 
 [^2]: If you make changes to the POM or properties file, you'll have to restart the server for them to take effect.
 
@@ -94,21 +98,21 @@ So, don't wait until you have implemented everything to start your server. DevTo
 
 ### A) Controllers
 
-> Controllers are like routers, it's purpose is to handle incoming requests (i.e map requests to a function), pass the request to a service for further processing, and generate an appropriate response depending on the outcome of the 'service call'
+> A controller is like router, it's purpose is to handle incoming requests (i.e map requests to a function), pass the request to a service for further processing, and generate an appropriate response depending on the outcome of the 'service call'
 
-**Controller types:** @controller is used to label a Java class that returns text/html while @RestController is to label a class that returns Json-formatted string. Additionally, annnotate the class with with @RequestMapping and specify its return type (eg. produces=MediaType.HTML_VALUE for @controller class) so that there is no ambiguity to Spring Boot.
+**Controller types:** @Controller is used to label a Java class that returns text/html while @RestController is to label a class that returns Json-formatted string. Additionally, annotate the class with @RequestMapping and specify its return type (eg. produces=MediaType.HTML_VALUE for @Controller class) so that there is no ambiguity to Spring Boot and other developers if you are working in a team.
 
-> In short, put functions that return html to @controller and json to @restcontroller
+> In short, put functions that return html to @Controller and json to @RestController
 
-**Initial steps:** After your Spring Boot server is running, first create all the routes to your server, ie. create functions and annotate them with @getmapping/ @postmapping plus the path (eg. path="/api/transfer"). As you create these functions, you will also add the _@PathVariable_ and/or _@RequestParam_. Initially, use `return null;` so that there is no error. Add in `logger.info("your message")` and you can immediately start checking if your route + requestParam/pathVariable is working.
+**Initial steps:** After your Spring Boot server is running, first create all the routes to your server, ie. create functions and annotate them with @getmapping/ @postmapping plus the path (eg. path="/api/transfer"). As you create these functions, you will also add the _@PathVariable_ and/or _@RequestParam_. Initially, use `return null;` so that there is no error. Add in `logger.info("your message")` and you can immediately start checking if your route + requestParam/pathVariable is working. Logging helps in printing out detailed messages in the terminal so that you can track of whether the codes you just added in work.
 
 > Create all the routes so that you won't miss out on any of the requirements and can immediately start testing as you develop your server
 
 **Next steps:** Once you have the routes, it's time to start thinking of the content to respond to the requests, ie. return what?
 
-For @controller, it's usually a html page so start creating a html and often you will have to pass some data to dynamically generate the page. Then, it is time to start implenting stuff in [repo](#b-repo) and [model](#c-model).
+@Controller typically returns a html page, so start scaffolding a html file to return the desired view. Oftenly, you will also need some data to dynamically generate the page. It is then time to start implementing stuff in [repo](#b-repo) and [model](#c-model).
 
-For @restcontroller, it's usually returning some data from DB or external API calls. So, you will also be starting to do something in repo and model.
+In @RestController, some data from DB or external API calls will be returned to the client. So, you will also be starting to do something in repo and model to be able to fetch data back for the controller.
 
 ### B) Repo
 
@@ -124,7 +128,7 @@ For @restcontroller, it's usually returning some data from DB or external API ca
 - [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html)
 - [MongoTemplate](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html)
 
-**Additional for MySQL**: query functions for MySQL require the writing of SQL strings. It's more organized to write these query strings in a seperate file as constants (with `static final`)- normally called `Queries.java`- especially in enterprise applications as it's easier to manage. SQL has it's own syntax and format to follow so it's good to refer to the documentation when you are still at the learning phase. (Thanks Daryl for showing us such documents exist). [Link to the SELECT statement](https://dev.mysql.com/doc/refman/8.0/en/select.html)
+**Additional for MySQL**: query functions for MySQL require the writing of SQL strings. It's more organized to write these query strings in a separate file as constants (with `static final`)- normally called `Queries.java`- especially in enterprise applications as it's easier to manage. SQL has its own syntax and format to follow so it's good to refer to the documentation when you are still at the learning phase. (Thanks Daryl for showing us such documents exist). [Link to the SELECT statement](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 
 ### C) Model
 
@@ -148,7 +152,7 @@ _Note:_ You may write static functions here to say, convert Json string to a cla
 
 > The Utils folder/class is created to store helper functions that should be static. It is like the role of a clerk who does many miscelleneous tasks but is nonetheless important in keeping our code base neat and tidy.
 
-**When to use:** typically when you got some logics that make your function looks bloated, you can put the part where it doesn't need to touch the repo or other Spring beans over here in utils. When there are codes that are repeating a few times and don't touch other beans, put them here. Static functions in your POJO? put them here too.
+**When to use:** Typically when you have some logics that make your function look bloated, you can put the part where it doesn't need to touch the repo or other Spring beans over here in utils. When there are codes that are repeated a few times and don't touch other beans, put them here. Static functions in your POJO? put them here too.
 
 ---
 
