@@ -12,6 +12,12 @@ public class Queries {
             WHERE account_id = ?
                 """;
 
+    public static final String SQL_SEL_ACCOUNT_BALANCE = """
+            SELECT balance
+            FROM accounts
+            WHERE account_id = ?
+                """;
+
     public static final String SQL_UPD_ACCOUNT_BALANCE = """
             UPDATE accounts
             SET balance = ?

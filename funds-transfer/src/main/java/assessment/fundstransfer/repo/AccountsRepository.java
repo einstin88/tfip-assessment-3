@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 import static assessment.fundstransfer.data.Queries.*;
 import assessment.fundstransfer.model.Account;
 
+/*
+ * Functions to query MySQL DB. Function names are self-explanatory
+ */
 @Repository
 public class AccountsRepository {
     @Autowired
@@ -24,6 +27,10 @@ public class AccountsRepository {
         return template.queryForObject(SQL_SEL_ACCOUNT_ID,
                 DataClassRowMapper.newInstance(Account.class),
                 id);
+    }
+
+    public Double findAccountBalance(String id) {
+        return template.queryForObject(SQL_SEL_ACCOUNT_BALANCE, Double.class, id);
     }
 
     public int[] updateAccountBalance(List<Object[]> updateDetails) {

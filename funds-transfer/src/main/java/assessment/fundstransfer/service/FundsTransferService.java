@@ -23,13 +23,23 @@ public class FundsTransferService {
     @Autowired
     private AccountsRepository repoSql;
 
+    /*
+     * Retrieves all available accounts on MySql
+     */
     public List<Account> getAccountList() {
         log.info(">>> Retrieving list of accounts...");
         return repoSql.findAccountList();
     }
 
+    /*
+     * Carries out further validations on conditions c0,2,5
+     * - c0: accounts 'from' and 'to' must exist
+     * - c2: cannot transfer to same account
+     * - c5: can only transfer if account has sufficient balance
+     */
     public void additionalTransferValidation(
             TransferRequest form, BindingResult result) {
+
         if (c0(form.from(), form.to())) {
             FieldError err = new FieldError("accountErr", "from",
                     "Invalid 'from' or 'to' account");
@@ -55,37 +65,53 @@ public class FundsTransferService {
         }
     }
 
+    /*
+     * Perform updates on account balances
+     * - Generate unique ID
+     * - Verify that updates are successful
+     * - Generate transaction document
+     */
     @Transactional
     public Transaction executeTransaction(TransferRequest form, BindingResult bindingResult) {
 
         String transactionID = UUID.randomUUID().toString().substring(0, 8);
         log.info(">>> Generated new Transaction ID: " + transactionID);
 
+        Account from = repoSql.findAccountById(form.from());
+        Account to = repoSql.findAccountById(form.to());
+        Double amount = form.amount();
+
+        // Updates account balances of sender and receiver
         int[] results = repoSql.updateAccountBalance(
                 Utils.createUpdateDetails(
-                        repoSql.findAccountById(form.from()),
-                        repoSql.findAccountById(form.to()),
-                        form.amount()));
+                        from,
+                        to,
+                        amount));
 
+        // Verify if updates are successful
         for (int result : results) {
             if (result < 1) {
                 FieldError err = new FieldError("transationErr", "amount",
-                        "Insufficient balance to transfer");
+                        "Transfer failed");
 
                 bindingResult.addError(err);
 
-                throw new DataAccessException("") {
+                throw new DataAccessException("Transfer failed") {
                 };
             }
         }
 
+        // Generate transaction document
         return Utils.createTransactionResult(
                 transactionID,
-                repoSql.findAccountById(form.from()),
-                repoSql.findAccountById(form.to()),
-                form.amount());
+                from,
+                to,
+                amount);
     }
 
+    /*
+     * Helper functions for validating c0,2,5
+     */
     private Boolean c0(String from, String to) {
         try {
             repoSql.findAccountById(from);
