@@ -86,7 +86,7 @@ Add the dependencies you need based on the task requirements. Be specific with w
 
 > To check if the application can boot up without errors before you add any of your fancy functions into it.
 
-It's easy to forget one or few properties, or using an old connection string, so it's a good idea to check if you have set them correctly at the start. You may also want to check if the connection to the DB hosted on the cloud is working.
+It's easy to forget to add necessary properties, or to update an old connection string when we reuse them, it's a good idea to check if you have set them correctly at the start. You may also want to check if the connection to the DB hosted on the cloud is working.
 
 So, don't wait until you have implemented everything to start your server. DevTools automatically helps you to restart the server every time you make changes to your code.[^2]
 
@@ -158,7 +158,7 @@ _Note:_ You may write static functions here to say, convert Json string to a cla
 
 ## [4. .next()](#contents)
 
-> TODO
+> Repeat the implementations again on another resource path, starting with the controller - is your controller's function receiving that request and data? Scaffold a simple html page to check before adding every piece of required data into it. Consider what do you need to do with the request and data. Is there data that you need to fetch from the database? If you have fetched the data, do you need to process them before returning to the controller?
 
 ## == END ==
 
