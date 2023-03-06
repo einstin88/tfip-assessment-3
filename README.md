@@ -22,8 +22,8 @@
 4. [.next()](#4-next)
 
 ## Credits:
-1. 
-2. 
+1. Andrea for correcting my occassional mind-twisting English and for the many helpful inputs.
+2. Chuk, Kenneth and Daryl for putting up a comprehensive syllabus and teaching us the details and nuances of developing web applications.
 
 ## 0. Purpose / Background
 
