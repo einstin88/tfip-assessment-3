@@ -158,7 +158,7 @@ _Note:_ You may write static functions here to say, convert Json string to a cla
 
 ## [4. .next()](#contents)
 
-> Repeat the implementations again on another resource path, starting with the controller - is your controller's function receiving that request and data? Scaffold a simple html page to check before adding every piece of required data into it. Consider what do you need to do with the request and data. Is there data that you need to fetch from the database? If you have fetched the data, do you need to process them before returning to the controller?
+Repeat the implementations again on another resource path, starting with the controller - is your controller's function receiving that request and data? Scaffold a simple html page to check before adding every piece of required data into it. Consider what do you need to do with the request and data. Is there data that you need to fetch from the database? If you have fetched the data, do you need to process them before returning to the controller?
 
 ## == END ==
 
