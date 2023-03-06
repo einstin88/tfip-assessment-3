@@ -122,7 +122,7 @@ In @RestController, some data from DB or external API calls will be returned to 
 
 **Initial steps:** Think of what data is required to be passed back to the calling function? Most of the time, it's multiple attributes/columns from the database. To ensure data integrity across your server app, it's best to create a POJO with all the required attributes/columns in the [model](#c-model) folder. The POJO will be used by the template libraries to convert your data in Java's format to its native format before reading/writing to the database.
 
-**Next steps:** When you have created the POJO, it's time to start using it as the return type in your query functions. Note that at time you want a list of data instead of a single object, so you'll have to think of which function in the template to use. The easy option is to look at Chuk's slides for examples. The better option in my opinion is to refer to the template library's documentation. I'll link them here for convenience.
+**Next steps:** When you have created the POJO, it's time to start using it as the return type in your query functions. Note that at times you want a list of data instead of a single object, so you'll have to think of which function in the template to use. The easy option is to look at Chuk's slides for examples. The better option in my opinion is to refer to the template library's documentation. I'll link them here for convenience.
 
 - [RedisTemplate](https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/RedisTemplate.html)
 - [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html)
@@ -132,7 +132,7 @@ In @RestController, some data from DB or external API calls will be returned to 
 
 ### C) Model
 
-> Classes in _model_ are POJOs that has private attributes, getters, setters, toString and others. They are the objects that carry data throughout the server. Their purpose is 1) to map data from forms, or 2) to map data format to a database's table/collection, or 3) to map data for a response by the controller (typically @restcontroller).
+> Classes in _model_ are POJOs that has private attributes, getters, setters, toString and others. They are the objects that carry data throughout the server. Their purpose is 1) to map data from forms, or 2) to map a schema of a database's table/collection, or 3) to map data for a response by the controller (typically @restcontroller).
 
 _Note:_ You may write static functions here to say, convert Json string to a class instance or vice versa. But according to Chuk, it's not very organized because it 'pollutes' the POJO and may create inefficiencies in large enterprise applications. The 'better' way is to write functions that transform data from one or more classes to another class in the `Utils.java` file.
 
@@ -140,11 +140,11 @@ _Note:_ You may write static functions here to say, convert Json string to a cla
 
 ### D) Service
 
-> The service class contains functions that perform business logics, ie. it will be called by the controller to process data or fetch data from DB or to transform data to another format, etc. Basically it is like a worker for the controller, so write your codes that do complicated logics here. API calls are made from the @service when needed. As such, it is the intermediary between controller and data.
+> The service class contains functions that perform business logics, ie. it will be called by the controller to process data or fetch data from DB or to transform data to another format, etc. Basically it is like a worker for the controller, so write your codes that do complicated logics here. API calls are made from the @service when needed. As such, it is the intermediary between controller and raw data.
 
 **Initial steps:** Now that you have a repository function that might or might not return some data, you will write codes that do the check here. Depending on the template used in repo, the service may be checking for exceptions or if the return value is null.
 
-**Custom validation of forms:** Sometimes there is a need to further validate data from a form, for example, tally the data from the form with data from somewhere else in the server. You have to write codes to do this and service is a good place to write them since service has access to the [repo](#b-repo). **Remember** to pass the BindingResult to your function, so that you can add any failed validation as an error. When the controller checks the BindingResult after calling your validation function, it can detect the errors and send the appropriate response back to the requestor.
+**Custom validation of forms:** Sometimes there is a need to further validate data from a form, for example, tally the data from the form with data from somewhere else in the server. You have to write codes to do this and service is a good place to write them since service has access to the [repo](#b-repo). **Remember** to pass the `BindingResult` to your function, so that you can add any failed validation as an error. When the controller checks the `BindingResult` after calling your validation function, it can detect the errors and send the appropriate response back to the requestor.
 
 **Next steps:** Upon doing what you need to in the service, your function is now ready to be called from the controller and you can start doing tests to make sure it works. I'm not knowledgable enough to do unit tests yet, my go-to is using the logger to display what's going on in my service.
 
