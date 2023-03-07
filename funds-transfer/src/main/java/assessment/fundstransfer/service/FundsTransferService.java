@@ -129,9 +129,9 @@ public class FundsTransferService {
     }
 
     private Boolean c5(String from, Double amount) {
-        if (repoSql.findAccountById(from).balance() >= amount)
-            return false;
+        if (amount == null || repoSql.findAccountBalance(from) < amount)
+            return true;
 
-        return true;
+        return false;
     }
 }
