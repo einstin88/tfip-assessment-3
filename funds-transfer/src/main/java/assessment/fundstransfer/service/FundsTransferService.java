@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 
 import assessment.fundstransfer.model.Account;
 import assessment.fundstransfer.model.Transaction;
@@ -41,7 +42,7 @@ public class FundsTransferService {
             TransferRequest form, BindingResult result) {
 
         if (c0(form.from(), form.to())) {
-            FieldError err = new FieldError("accountErr", "from",
+            ObjectError err = new FieldError("accountErr", "from",
                     "Invalid 'from' or 'to' account");
 
             result.addError(err);

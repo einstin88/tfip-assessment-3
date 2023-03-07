@@ -1,6 +1,7 @@
 package assessment.fundstransfer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,13 +73,20 @@ public class FundsTransferController {
 
         // Else, proceed with transaction that is protected by @transactional
         log.info("+++ Validation success. Proceeding to execute transfer...");
-        Transaction response = svc.executeTransaction(transferRequest, result);
-
-        if (result.hasErrors()) {
+        Transaction response = null;
+        try {
+            response = svc.executeTransaction(transferRequest, result);
+        } catch (DataAccessException e) {
             log.error("--- Error updating account balances");
             model.addAttribute("accounts", svc.getAccountList());
             return "funds-transfer";
         }
+
+        // if (result.hasErrors()) {
+        //     log.error("--- Error updating account balances");
+        //     model.addAttribute("accounts", svc.getAccountList());
+        //     return "funds-transfer";
+        // }
 
         // Finally, log the transaction to redis
         logSvc.insertLog(response);
