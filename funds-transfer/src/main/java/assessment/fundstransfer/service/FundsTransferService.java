@@ -129,7 +129,7 @@ public class FundsTransferService {
     }
 
     private Boolean c5(String from, Double amount) {
-        if (amount == null || repoSql.findAccountBalance(from) < amount)
+        if (repoSql.findAccountBalance(from) < amount)
             return true;
 
         return false;

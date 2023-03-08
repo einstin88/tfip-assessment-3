@@ -60,13 +60,19 @@ public class FundsTransferController {
 
         log.info(">>> POST request for funds transfer...");
         log.info(">>> Transfer form received: " + transferRequest);
+        
+        if (result.hasErrors()) {
+            log.error("--- Submitted transfer request form is invalid!");
+            model.addAttribute("accounts", svc.getAccountList());
+            return "funds-transfer";
+        }
 
         // Further validates conditions c0,2,5
         svc.additionalTransferValidation(transferRequest, result);
 
         // If any validation failed, redirect to form again to display errors
         if (result.hasErrors()) {
-            log.error("--- Submitted transfer request form is invalid!");
+            log.error("--- Additional validation of transfer request form is invalid!");
             model.addAttribute("accounts", svc.getAccountList());
             return "funds-transfer";
         }
