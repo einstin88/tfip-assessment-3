@@ -40,7 +40,7 @@ public class FundsTransferController {
         model.addAttribute("transferRequest", Utils.createNewTransferForm());
         model.addAttribute("accounts", svc.getAccountList());
 
-        return "funds-transfer";
+        return "view0";
     }
 
     /*

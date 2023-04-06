@@ -11,5 +11,8 @@ public record Account(
     String firstName,
     Double balance
 ) {
-    
+    // public Account {
+    //     balance = balance > 10d ? balance : null;
+    // }
 }
+
