@@ -35,7 +35,10 @@ public class TodoService {
     @Transactional(rollbackFor = { UserCreationException.class, TaskCreationException.class })
     public SuccessResult upsertTask(Map<String, String> data) {
         /*
-         * User logic
+         * USER LOGIC
+         * - gets username from the data-map and verifies it with DB
+         * - will try to create new user if username wasn't found
+         * - errors caught during user creation will cause rollback on DB 
          */
 
         // log.info(">> Check data map size before: " + data.size());
@@ -62,19 +65,19 @@ public class TodoService {
         log.info(">>> User id is :" + uid);
 
         /*
-         * Task logic
+         * TASK LOGIC
+         * - size of data map is now exact multiple of 3's since username key is removed
+         * >> assembles key -> extract values from data-map -> set values into new Task instance
+         * - attempts to insert new Task to DB. Caught errors during insertion will cause rollback on DB
          */
         for (int i = 0; i < data.size() / 3; i++) {
-            // log.info(">> Field " + data.get(createField(FIELD_DESC, i)));
-            // log.info(">> Field " + data.get(createField(FIELD_PRIO, i)));
-            // log.info(">> Field " + data.get(createField(FIELD_DUE, i)));
             Task newTask = new Task();
             newTask.setDescription(
-                    data.get(createField(FIELD_DESC, i)));
+                    data.get(createKey(FIELD_DESC, i)));
             newTask.setPriority(
-                    Integer.parseInt(data.get(createField(FIELD_PRIO, i))));
+                    Integer.parseInt(data.get(createKey(FIELD_PRIO, i))));
             newTask.setDueDate(
-                    LocalDate.parse(data.get(createField(FIELD_DUE, i))));
+                    LocalDate.parse(data.get(createKey(FIELD_DUE, i))));
             log.info(">>> Task to insert: " + newTask);
 
             try {
@@ -85,10 +88,12 @@ public class TodoService {
                 throw new TaskCreationException("Failed to save task no. " + i);
             }
         }
+        // If code runs up to this point, all DB transactions were successfully updated
+        // Returns the result to controller
         return new SuccessResult(username, data.size() / 3);
     }
 
-    private static String createField(String prefix, Integer idx) {
+    private static String createKey(String prefix, Integer idx) {
         return String.format("%s-%d", prefix, idx);
     }
 }

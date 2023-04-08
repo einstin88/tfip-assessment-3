@@ -37,7 +37,7 @@ public class UserRepository {
         return template.update(SQL_INSERT_USER,
                 uid,
                 user.getUsername(),
-                user.getName()) > 0 ? uid : "";
+                user.getName()) == 1 ? uid : "";
 
     }
 }

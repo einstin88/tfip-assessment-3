@@ -12,3 +12,5 @@ buildNumber.properties
 
 .mvn
 *test
+*.rdb
+*.vim
